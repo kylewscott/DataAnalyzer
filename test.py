@@ -1,13 +1,24 @@
 from langchain.prompts import PromptTemplate
-from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
-from langchain_community.chat_models import ChatOllama
+from langchain_ollama import ChatOllama
 import torch
 import pandas as pd
 
 #TODO  Create stronger template, do some research on it, put in own file eventually
+examples = [
+    {
+        "question": "Add example questions and outputs here"
+        "response": "This is the response"
+    }
+]
+
+example_prompt = PromptTemplate(
+    input_variables=["question","response"], template="Question: {question}\nResponse: {response}"
+)
+
+#STRENGTHEN THIS
 prompt = PromptTemplate(
-    template="""
+    template=""" 
     You will generate python code to create graphs.
     You Will be given a question: {question}
     This question will be asking for graphs on specfic data in the file: {dataFile}
@@ -25,6 +36,7 @@ prompt = PromptTemplate(
 )
 
 cuda_device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 llm = ChatOllama(model='llama3', temperature=0, device=cuda_device)
 
 rag_chain = prompt | llm | StrOutputParser()
@@ -55,6 +67,8 @@ while(1):
 
     code_start = "START"
     code_end = "END"
+
+    print(generation)
 
     code_only = generation.split(code_start)[-1].split(code_end)[0]
     #TODO check for errors in code, if errors, give llama the code back and ask for fix
