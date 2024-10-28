@@ -17,7 +17,7 @@ llm = ChatOllama(model='llama3', temperature=0, device=cuda_device)
 
 rag_chain = prompt | llm | StrOutputParser()
 
-df= pd.read_csv('../Datasets/user_behavior_dataset.csv')[0:1]
+df= pd.read_csv('../../Datasets/user_behavior_dataset.csv')[0:1]
 data_json = df.to_json(orient='records')
 
 def analyzer(prompt):
