@@ -6,11 +6,8 @@ from DataAnalyzer.prompt import getPrompt
 import os
 
 prompt = getPrompt()
-
 cuda_device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 llm = ChatOllama(model='llama3', temperature=0, device=cuda_device)
-
 rag_chain = prompt | llm | StrOutputParser()
 
 df= pd.read_csv('../../Datasets/user_behavior_dataset.csv')[0:1]
@@ -27,10 +24,7 @@ def save_graph(plt, filename):
 def analyzer(prompt):
     generation = rag_chain.invoke({"data": data_json, "dataFile": '../../Datasets/user_behavior_dataset.csv', "question": prompt})
 
-    code_start = "START"
-    code_end = "END"
-
-    code_only = generation.split(code_start)[-1].split(code_end)[0]
+    code_only = generation.split("START")[-1].split("END")[0]
     explanation =  generation.split('<')[-1].split('>')[0]
 
     try:
