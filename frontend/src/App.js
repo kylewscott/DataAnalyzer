@@ -1,33 +1,34 @@
-// Filename - App.js
-
-// Importing modules
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 function App() {
-    // usestate for setting a javascript
-    // object for storing and using data
-    const [data, setdata] = useState({value: ''});
+    const [explanation, setExplanation] = useState('');
+    const [graphUrl, setGraphUrl] = useState('')
+    const [prompt, setPrompt] = useState('')
 
-    // Using useEffect for single rendering
-    useEffect(() => {
-        // Using fetch to fetch the api from 
-        // flask server it will be redirected to proxy
-        fetch("/data").then((res) =>
-            res.json().then((data) => {
-                // Setting a data from api
-                setdata({value: data.value});
-            })
-        );
-    }, []);
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const response =  await fetch(`/api/data?param=${prompt}`);
+        if(response.ok) {
+            const result = await response.json();
+            setExplanation(result.explanation)
+            setGraphUrl(`http://localhost:5000${result.graphUrl}?t=${new Date().getTime()}`)
+        }
+    };
 
     return (
         <div className="App">
             <header className="App-header">
-                <h1>React and flask</h1>
-                {/* Calling a data from setdata for showing */}
-                <p>{data.value}</p>
-
+                <h1>Graph Generation</h1>
+                <form onSubmit={handleSubmit} method="post">
+                    <input type="text" name="prompt" placeholder="Enter your prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} required />
+                    <input type="submit" value="Generate Graph" />
+                </form>
+                <p>{explanation}</p>
+                {explanation &&
+                    <img src={graphUrl} alt="graph"></img>
+                }
             </header>
         </div>
     );

@@ -13,6 +13,43 @@
   }
 }
 
+/* Input field styling */
+.App-header input[type="text"] {
+    padding: 10px 15px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* Input field focus effect */
+.App-header input[type="text"]:focus {
+    border-color: #007BFF; /* Light blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Subtle shadow on focus */
+}
+
+/* Submit button styling */
+.App-header input[type="submit"] {
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Submit button hover effect */
+.App-header input[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

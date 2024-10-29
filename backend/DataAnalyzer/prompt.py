@@ -8,15 +8,17 @@ examples = [
         import pandas as pd
         import matplotlib.pyplot as plt
 
-        data = pd.read_csv('../Datasets/user_behavior_dataset.csv')
+        def generate_plot():
+            data = pd.read_csv('../../Datasets/user_behavior_dataset.csv')
 
-        plt.figure(figsize=(10,6))
-        plt.plot(data['Screen On Time (hours/day)'].head(50), marker='o')
-        plt.xlabel('User ID')
-        plt.ylabel('Screen On Time (hours/day)')
-        plt.title('Screen Time of the First 50 Users')
-        plt.show()
+            plt.figure(figsize=(10,6))
+            plt.plot(data['Screen On Time (hours/day)'].head(50), marker='o')
+            plt.xlabel('User ID')
+            plt.ylabel('Screen On Time (hours/day)')
+            plt.title('Screen Time of the First 50 Users')
 
+            return plt
+            
         END
 
         <The graph shows the screen time in hours per day for the first 50 users, with each user represented by a single data point.>
@@ -40,6 +42,7 @@ You Will be given a question: {question}
 This question will be asking for graphs on specfic data in the file: {dataFile}
 Here is the labels and a row of data: {data}
 You will generate the python code to create the requested graph.
+Wrap code in a function called generate_plot as seen in the example.
 Do Not talk about the code at all.
 The code should be executable and run without error.
 Wrap the exectuable code including imports in START and END blocks.
