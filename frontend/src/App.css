@@ -73,3 +73,101 @@
     transform: rotate(360deg);
   }
 }
+
+/* Chat history container */
+.chat-history {
+  font-size: 18px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #1e1e2f;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Chat message styles */
+.chat-message {
+  word-wrap: break-word;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.user-message {
+  margin-left: 150px;
+  max-width: 450px;
+  background-color: #b2b2b2;
+  color: white;
+  text-align: right;
+}
+
+.bot-message {
+  margin-right: 150px;
+  max-width: 450px;
+  background-color: #444;
+  color: white;
+  text-align: left;
+}
+
+/* Form container styling */
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Input field styling */
+form input[type="text"] {
+  padding: 10px 50px 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Input field focus effect */
+form input[type="text"]:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Arrow button styling */
+form button {
+  position: absolute;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 20%;
+  color: white;
+  width: 30px;
+  height: 35px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 25px;
+  line-height: 1;
+  text-align: center;
+  padding: 0;
+}
+
+/* Hover effect for the button */
+form button:hover {
+  background-color: #0056b3;
+}
+
+form {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+/* Input field and submit button (reuse from your existing styles) */
+
