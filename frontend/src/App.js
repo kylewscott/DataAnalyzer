@@ -1,37 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
     const [explanation, setExplanation] = useState('');
-    const [graphUrl, setGraphUrl] = useState('')
-    const [chatHistory, setChatHistory] = useState([])
-    const [prompt, setPrompt] = useState('')
+    const [graphUrl, setGraphUrl] = useState('');
+    const [chatHistory, setChatHistory] = useState([]);
+    const [prompt, setPrompt] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    useEffect(() => {
+        const clearGraphs = async () => {
+            try {
+                const response = await fetch('/api/clear_graphs', { method: 'POST' });
+                if (!response.ok) {
+                    console.error('Failed to clear graph directory:', await response.text());
+                }
+            } catch (error) {
+                console.error('Error clearing graph directory:', error);
+            }
+        };
+
+        clearGraphs();
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        setChatHistory((previousHistory) => [
-            ...previousHistory,
-            { sender: 'User', text: prompt },
-            { sender: 'bot', text: 'result', graphUrl: 'graphUrl' }
-        ])
-        setPrompt('')
-        setExplanation('explenation')
-        setGraphUrl(`graphUrl`)
+        // Prevent further submission if already submitting
+        if (isSubmitting) return;
 
-        // const response =  await fetch(`/api/data?param=${prompt}`);
+        setIsSubmitting(true);
 
-        // if(response.ok) {
-        //     const result = await response.json();
-        //     setChatHistory((previousHistory) => [
-        //         ...previousHistory,
-        //         { sender: 'User', text: prompt },
-        //         { sender: 'bot', text: result.explanation, graphUrl: result.graphUrl }
-        //     ])
-        //     setPrompt('')
-        //     setExplanation(result.explanation)
-        //     setGraphUrl(`http://localhost:5000${result.graphUrl}?t=${new Date().getTime()}`)
-        // } 
+        const response = await fetch(`/api/data?param=${prompt}`);
+        if (response.ok) {
+            const result = await response.json();
+
+            setChatHistory((previousHistory) => [
+                ...previousHistory,
+                { sender: 'User', text: prompt },
+                { sender: 'bot', text: result.explanation, graphUrl: result.graphUrl },
+            ]);
+            setPrompt('');
+            setExplanation(result.explanation);
+
+            // Store the graph URL without the changing timestamp in the URL
+            setGraphUrl(result.graphUrl);
+        }
+
+        setIsSubmitting(false);
+    };
+
+    const handleInputChange = (event) => {
+        setPrompt(event.target.value);
     };
 
     return (
@@ -48,10 +68,20 @@ function App() {
                         >
                             <p>{message.text}</p>
                             {message.graphUrl && (
-                                <img
-                                    src={`http://localhost:5000${message.graphUrl}?t=${new Date().getTime()}`}
-                                    alt="graph"
-                                />
+                                <div>
+                                    <img
+                                        src={`http://localhost:5000${message.graphUrl}`}
+                                        alt="graph"
+                                        className="graph-image"
+                                    />
+                                    <a
+                                        href={message.graphUrl}
+                                        download={`graph_${index}.png`}
+                                        className="download-link"
+                                    >
+                                        Download Graph
+                                    </a>
+                                </div>
                             )}
                         </div>
                     ))}
@@ -62,10 +92,10 @@ function App() {
                         name="prompt"
                         placeholder="Ask a question"
                         value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
+                        onChange={handleInputChange}
                         required
                     />
-                    <button type="submit">↑</button>
+                    <button type="submit" disabled={isSubmitting}>↑</button>
                 </form>
             </header>
         </div>

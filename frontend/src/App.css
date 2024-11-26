@@ -78,8 +78,8 @@
 .chat-history {
   font-size: 18px;
   width: 100%;
-  max-width: 600px;
-  max-height: 400px;
+  max-width: 800px;
+  max-height: 600px;
   overflow-y: auto;
   margin-bottom: 20px;
   padding: 10px;
@@ -97,8 +97,8 @@
 }
 
 .user-message {
-  margin-left: 150px;
-  max-width: 450px;
+  margin-left: 350px;
+  max-width: 650px;
   background-color: #b2b2b2;
   color: white;
   text-align: right;
@@ -106,7 +106,7 @@
 
 .bot-message {
   margin-right: 150px;
-  max-width: 450px;
+  max-width: 650px;
   background-color: #444;
   color: white;
   text-align: left;
@@ -170,4 +170,9 @@ form {
   max-width: 400px;
 }
 /* Input field and submit button (reuse from your existing styles) */
+
+.graph-image {
+  width: 600px;
+  height: 400px;
+}
 
