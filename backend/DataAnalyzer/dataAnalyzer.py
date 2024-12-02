@@ -71,20 +71,15 @@ def graph_data(prompt):
     code_only = generation.split("START")[-1].split("END")[0]
     explanation =  generation.split('<')[-1].split('>')[0]
 
-    try:
-        exec_locals = {"pd":pd}
-        exec(code_only, exec_locals)
+    exec_locals = {"pd":pd}
+    exec(code_only, exec_locals)
 
-        if 'generate_plot' in exec_locals:
-            timestamp = int(time.time())
-            plt = exec_locals['generate_plot']() 
-            graph_path = save_graph(plt, f'generated_graph_{timestamp}.png')
-        else:
-            print("No function named 'generate_plot' found in generated code.")
-
-    except Exception as e: 
-        print(e)
-        return("AHHH")
+    if 'generate_plot' in exec_locals:
+        timestamp = int(time.time())
+        plt = exec_locals['generate_plot']() 
+        graph_path = save_graph(plt, f'generated_graph_{timestamp}.png')
+    else:
+        print("No function named 'generate_plot' found in generated code.")
 
     return explanation, graph_path
 
@@ -98,6 +93,4 @@ def analyzer(prompt):
     else:
         return 'Unable to do that', ''
 
-    
 
-#TODO Find a way for llama to be able to remember the last question and ouput in case the user references back to it
