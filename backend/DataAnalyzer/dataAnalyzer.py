@@ -32,7 +32,7 @@ def save_graph(plt, filename):
     return file_path
 
 def clear_graph_directory():
-    output_dir = 'C:\Projects\LLM\LLM_REPO\public\graphs'
+    output_dir = '../public/graphs'
     if os.path.exists(output_dir):
         files = glob.glob(os.path.join(output_dir, '*'))
         for file in files:
@@ -40,7 +40,7 @@ def clear_graph_directory():
 
 
 def explain_data(prompt):
-    loader = CSVLoader(file_path='../../Datasets/user_behavior_dataset.csv', encoding="utf-8", csv_args={'delimiter': ','})
+    loader = CSVLoader(file_path='../public/data/user_behavior_dataset.csv', encoding="utf-8", csv_args={'delimiter': ','})
     data = loader.load()
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
@@ -61,12 +61,12 @@ def explain_data(prompt):
     return result['answer'], ' '
 
 def graph_data(prompt):
-    df= pd.read_csv('../../Datasets/user_behavior_dataset.csv')[0:1]
+    df= pd.read_csv('../public/data/user_behavior_dataset.csv')[0:1]
     data_json = df.to_json(orient='records')
 
     few_shot_prompt_template = graph_prompt()
     rag_chain = few_shot_prompt_template | llm | StrOutputParser()
-    generation = rag_chain.invoke({"data": data_json, "dataFile": '../../Datasets/user_behavior_dataset.csv', "question": prompt})
+    generation = rag_chain.invoke({"data": data_json, "dataFile": '../public/data/user_behavior_dataset.csv', "question": prompt})
 
     code_only = generation.split("START")[-1].split("END")[0]
     explanation =  generation.split('<')[-1].split('>')[0]
