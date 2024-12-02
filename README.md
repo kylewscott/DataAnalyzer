@@ -1,2 +1,2 @@
-# LLM (Name pending)
-Put Description here
+# Data Analyzer
+An AI Agent that utilizes Langchain and Chat Ollama to analyze data and generate graphs
