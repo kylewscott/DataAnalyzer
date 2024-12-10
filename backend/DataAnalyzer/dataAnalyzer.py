@@ -1,4 +1,5 @@
 from langchain_core.output_parsers import StrOutputParser
+from langchain_openai import OpenAI
 from langchain_ollama import ChatOllama
 from langchain.embeddings import HuggingFaceBgeEmbeddings
 from langchain.vectorstores import FAISS
@@ -12,6 +13,7 @@ import time
 import glob
 import torch
 import pandas as pd
+import openai
 from pydantic import BaseModel
 
 DB_FAISS_PATH = 'vectorstore/db_faiss'
@@ -95,12 +97,12 @@ def graph_data(prompt):
     return result
 
 
-def analyzer(query: str):
-    prompt_type = classify_query(llm, query)
+def analyzer(prompt: str):
+    prompt_type = classify_query(llm, prompt)
     if(prompt_type == 'graph'):
-        return graph_data(query['query'])
+        return graph_data(prompt)
     elif(prompt_type == 'explanation'):
-        return explain_data(query['query'])
+        return explain_data(prompt)
     else:
         return 'Unable to do that', ''
 

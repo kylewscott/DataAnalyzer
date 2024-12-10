@@ -1,13 +1,22 @@
-from langcorn import create_service
-from dataAnalyzer import clear_graph_directory
+from fastapi import FastAPI
+from dataAnalyzer import clear_graph_directory, analyzer
+from pydantic import BaseModel
 
-app = create_service("dataAnalyzer:analyzer")
+app = FastAPI(
+    title="API for Data Analyzer App",
+    version="1.0",
+    decription="query for data analysis services"
+)
 
-@app.post("/clear_graphs")
-async def clear_graphs():
-    try:
-        # Call the function to clear the directory
-        clear_graph_directory()
-        return {"message": "Graph directory cleared successfully."}, 200
-    except Exception as e:
-        return {"message": f"Failed to clear graph directory: {str(e)}"}, 500
+class PromptRequest(BaseModel):
+    prompt: str
+
+@app.post(path="/analyze")
+def run_prompt (prompt: PromptRequest):
+    response = analyzer(prompt.prompt)
+    return {"status": "success", "response": response}
+
+@app.get("/cleanup")
+def run_prompt ():
+    clear_graph_directory()
+    return {"status": "success", "response": "cleaned up"}
