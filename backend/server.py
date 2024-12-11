@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-static_directory = os.path.abspath("../../public/graphs")
+static_directory = os.path.abspath("../public/graphs")
 app.mount("/graphs", StaticFiles(directory=static_directory), name="graphs")
 
 class PromptRequest(BaseModel):
