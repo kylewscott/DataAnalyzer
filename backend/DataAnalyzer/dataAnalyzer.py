@@ -37,7 +37,7 @@ def save_graph(plt, filename):
     plt.savefig(file_path)
     plt.close()  
     return file_path
-
+ 
 def clear_graph_directory():
     output_dir = '../../public/graphs'
     if os.path.exists(output_dir):
@@ -69,7 +69,6 @@ def explain_data(prompt):
 
     result = ResponseModel(explanation=explanation, graph_path='')
     return result
-    #return result['answer'], ' '
 
 def graph_data(prompt):
     df= pd.read_csv('../../public/data/user_behavior_dataset.csv')[0:1]
@@ -92,8 +91,7 @@ def graph_data(prompt):
     else:
         print("No function named 'generate_plot' found in generated code.")
 
-    # result = {'explanation': explanation, 'graph_path': graph_path}
-    result = ResponseModel(explanation=explanation, graph_path=graph_path)
+    result = ResponseModel(explanation=explanation, graph_path=f'graphs/generated_graph_{timestamp}.png')
     return result
 
 
