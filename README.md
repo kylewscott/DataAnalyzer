@@ -1,15 +1,22 @@
 # Data Analyzer
 This application is an AI agent that utilizes LangChain and Chat Ollama to analyze data and generate graphs. It features a backend for processing prompts and a React-based frontend for interactive visualization.
-## Live App
-The app can be found live here
 
-## Running Locally
-### Setup
+## Live App
+Deployment being worked on
+
+## Setup Locally
 * Clone repository ```git clone https://github.com/kylewscott/DataAnalyzer.git```
+### Backend
 * Inside repository navigate to the backend folder and run ```pip install -r requirements.txt```
-* In the frontend folder run: ```npm install``` 
+* In the backend folder run: ```uvicorn server:app --host 'localhost' --port 8000```
+* Navaigate to ```http://localhost:8000/docs``` for the API 
   
-### Starting app
-* In the backend folder run: ```uvicorn server:app --host 0.0.0.0 --port 8000```
-* In the froned folder run: ```npm start```
+### Frontend
+* Inside repository navigate to the frontend folder and run: ```npm install``` 
+* In the frontend folder run ```npm start``` 
+* The frontend app can be found at ```http://localhost:3000```
+
+### Notes
+* The backend needs to be running in order for the frontend to function correctly
+* Requests may take a long time for systems without a GPU
 
