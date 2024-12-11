@@ -3,13 +3,12 @@ This application is an AI agent that utilizes LangChain and Chat Ollama to analy
 
 In the app you can upload your own CSV file from your computer and ask questions about the data or ask for specifc graphs to be generated regarding the data.
 
-## Live App
-Deployment being worked on
+#### Live App: In progress
 
 ## Setup Locally
 * Clone repository ```git clone https://github.com/kylewscott/DataAnalyzer.git```
 
-#### Requirements
+### Requirements
 * Python version 3.9 or greater (https://www.python.org/downloads/)
 * Node, version 22 preffered (https://nodejs.org/en/download/package-manager)
   
