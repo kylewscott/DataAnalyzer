@@ -13,6 +13,10 @@
         {
             "src": "/(.*)",
             "dest": "server.py"
+        },
+        {
+            "src": "/graphs/(.*)",
+            "dest": "/public/graphs/$1"
         }
     ]
 }
