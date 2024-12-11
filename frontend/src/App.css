@@ -176,3 +176,50 @@ form {
   height: 400px;
 }
 
+.file-upload {
+  display: flex;  
+  align-items: center; 
+  justify-content: flex-start; 
+  width: 100%;  
+  max-width: 600px; 
+  margin: 10px auto;  
+  margin-bottom: 50px;
+  padding: 5px; 
+  border-radius: 4px;  
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); 
+}
+
+/* Input field */
+.file-upload input[type="file"] {
+  padding: 6px 8px; 
+  font-size: 14px; 
+  width: 400px;
+  margin-right: 10px;  
+  border-radius: 4px;  
+  flex-shrink: 0;  
+}
+
+/* Upload button */
+.file-upload button {
+  padding: 6px 10px;  
+  font-size: 14px; 
+  background-color: #007bff;
+  margin-left: 50px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+.file-upload button:hover {
+  background-color: #0056b3; 
+}
+
+/* Uploaded file name */
+.uploaded-file-name {
+  font-size: 14px;  
+  color: black;
+  margin-left: 10px; 
+}

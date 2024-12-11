@@ -5,6 +5,8 @@ function App() {
     const [chatHistory, setChatHistory] = useState([]);
     const [prompt, setPrompt] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null); 
+    const [dataFileName, setDataFileName] = useState('')
 
     useEffect(() => {
         const clearGraphs = async () => {
@@ -29,12 +31,17 @@ function App() {
 
         setIsSubmitting(true);
 
+        const request_data = {
+            prompt, 
+            file_name: dataFileName
+        }
+
         const response = await fetch("http://localhost:8000/analyze", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ prompt }),
+            body: JSON.stringify(request_data),
         });
 
         if (response.ok) {
@@ -49,6 +56,40 @@ function App() {
         }
 
         setIsSubmitting(false);
+    };
+
+    const handleFileUpload = async () => {
+        if (!selectedFile) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+
+        try {
+            const response = await fetch("http://localhost:8000/upload", {
+                method: "POST",
+                body: formData,
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`File uploaded successfully: ${result.file_name}`);
+                setDataFileName(result.file_name)
+
+            } else {
+                alert(`Error: ${result.detail}`);
+            }
+        } catch (error) {
+            console.error("Upload failed", error);
+            alert("An error occurred during upload.");
+        }
+    };
+
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
     };
 
     const handleInputChange = (event) => {
@@ -80,52 +121,66 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <h1>Data Analyzer</h1>
-                <p style={{ fontSize: '22px' }}>Ask for explanations about the data and graph generations</p>
-                <p></p>
-                <div className="chat-history">
-                    {chatHistory.map((message, index) => 
-                    (
-                        <div
-                            key={index}
-                            className={`chat-message ${
-                                message.sender === "User" ? "user-message" : "bot-message"
-                            }`}
-                        >
-                            <p>{message.text}</p>
-                            {message.graph_path && (
-                                <div>
-                                    <img
-                                        src={`http://localhost:8000/${message.graph_path}`}
-                                        alt="graph"
-                                        className="graph-image"
-                                    />
-                                    <a
-                                        href={`http://localhost:8000/${message.graph_path}`}
-                                        download
-                                        onClick={e => {
-                                            e.preventDefault()
-                                            download(e)
-                                        }}
-                                        className="download-link"
-                                    >
-                                        Download Graph
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-                <form onSubmit={handleSubmit}>
+                <p style={{ fontSize: '22px' }}>Upload a CSV file and ask questions about the data or ask to generate a graph</p>
+                <div className="file-upload">
                     <input
-                        type="text"
-                        name="prompt"
-                        placeholder="Ask a question"
-                        value={prompt}
-                        onChange={handleInputChange}
-                        required
+                        type="file"
+                        onChange={handleFileChange}
+                        accept=".csv"
                     />
-                    <button type="submit" disabled={isSubmitting}>↑</button>
-                </form>
+                    <button onClick={handleFileUpload}>
+                        Upload File
+                    </button>
+                <p></p>
+                </div>
+                {dataFileName &&
+                    <div className="chat-history">
+                        {chatHistory.map((message, index) => 
+                        (
+                            <div
+                                key={index}
+                                className={`chat-message ${
+                                    message.sender === "User" ? "user-message" : "bot-message"
+                                }`}
+                            >
+                                <p>{message.text}</p>
+                                {message.graph_path && (
+                                    <div>
+                                        <img
+                                            src={`http://localhost:8000/${message.graph_path}`}
+                                            alt="graph"
+                                            className="graph-image"
+                                        />
+                                        <a
+                                            href={`http://localhost:8000/${message.graph_path}`}
+                                            download
+                                            onClick={e => {
+                                                e.preventDefault()
+                                                download(e)
+                                            }}
+                                            className="download-link"
+                                        >
+                                            Download Graph
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                }
+                {dataFileName &&
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            name="prompt"
+                            placeholder="Ask a question"
+                            value={prompt}
+                            onChange={handleInputChange}
+                            required
+                        />
+                        <button type="submit" disabled={isSubmitting}>↑</button>
+                    </form>
+                }
             </header>
         </div>
     );

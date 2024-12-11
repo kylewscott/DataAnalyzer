@@ -1,5 +1,4 @@
 from langchain_core.output_parsers import StrOutputParser
-from langchain_openai import OpenAI
 from langchain_ollama import ChatOllama
 from langchain.embeddings import HuggingFaceBgeEmbeddings
 from langchain.vectorstores import FAISS
@@ -13,10 +12,11 @@ import time
 import glob
 import torch
 import pandas as pd
-import openai
 from pydantic import BaseModel
 
 DB_FAISS_PATH = 'vectorstore/db_faiss'
+
+data_file = ''
 
 class ResponseModel(BaseModel):
     explanation: str
@@ -36,18 +36,22 @@ def save_graph(plt, filename):
     file_path = os.path.join(output_dir, filename)
     plt.savefig(file_path)
     plt.close()  
-    return file_path
  
 def clear_graph_directory():
-    output_dir = '../public/graphs'
-    if os.path.exists(output_dir):
-        files = glob.glob(os.path.join(output_dir, '*'))
+    graph_dir = '../public/graphs'
+    if os.path.exists(graph_dir):
+        files = glob.glob(os.path.join(graph_dir, '*'))
+        for file in files:
+            os.remove(file);
+    data_dir = '../public/data'
+    if os.path.exists(data_dir):
+        files = glob.glob(os.path.join(data_dir, '*'))
         for file in files:
             os.remove(file);
 
 
-def explain_data(prompt):
-    loader = CSVLoader(file_path='../public/data/user_behavior_dataset.csv', encoding="utf-8", csv_args={'delimiter': ','})
+def explain_data(prompt, file_name):
+    loader = CSVLoader(file_path=f'../public/data/${file_name}', encoding="utf-8", csv_args={'delimiter': ','})
     data = loader.load()
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
@@ -70,13 +74,13 @@ def explain_data(prompt):
     result = ResponseModel(explanation=explanation, graph_path='')
     return result
 
-def graph_data(prompt):
-    df= pd.read_csv('../public/data/user_behavior_dataset.csv')[0:1]
+def graph_data(prompt, file_name):
+    df= pd.read_csv(f'../public/data/{file_name}')[0:1]
     data_json = df.to_json(orient='records')
 
     few_shot_prompt_template = graph_prompt()
     rag_chain = few_shot_prompt_template | llm | StrOutputParser()
-    generation = rag_chain.invoke({"data": data_json, "dataFile": '../public/data/user_behavior_dataset.csv', "question": prompt})
+    generation = rag_chain.invoke({"data": data_json, "dataFile": f'../public/data/{file_name}', "question": prompt})
 
     code_only = generation.split("START")[-1].split("END")[0]
     explanation =  generation.split('<')[-1].split('>')[0]
@@ -87,7 +91,7 @@ def graph_data(prompt):
     if 'generate_plot' in exec_locals:
         timestamp = int(time.time())
         plt = exec_locals['generate_plot']() 
-        graph_path = save_graph(plt, f'generated_graph_{timestamp}.png')
+        save_graph(plt, f'generated_graph_{timestamp}.png')
     else:
         print("No function named 'generate_plot' found in generated code.")
 
@@ -95,12 +99,12 @@ def graph_data(prompt):
     return result
 
 
-def analyzer(prompt: str):
+def analyzer(prompt: str, file_name: str):
     prompt_type = classify_query(llm, prompt)
     if(prompt_type == 'graph'):
-        return graph_data(prompt)
+        return graph_data(prompt, file_name)
     elif(prompt_type == 'explanation'):
-        return explain_data(prompt)
+        return explain_data(prompt, file_name)
     else:
         return 'Unable to do that', ''
 
