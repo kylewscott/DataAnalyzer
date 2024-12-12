@@ -51,7 +51,7 @@ def clear_graph_directory():
 
 
 def explain_data(prompt, file_name):
-    loader = CSVLoader(file_path=f'../public/data/${file_name}', encoding="utf-8", csv_args={'delimiter': ','})
+    loader = CSVLoader(file_path=f'../public/data/{file_name}', encoding="utf-8", csv_args={'delimiter': ','})
     data = loader.load()
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)

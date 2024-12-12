@@ -8,10 +8,13 @@ function App() {
     const [selectedFile, setSelectedFile] = useState(null); 
     const [dataFileName, setDataFileName] = useState('')
 
+    //const URL = 'http://localhost:8000' //*LOCAL DEVELOPEMENT*/
+    const URL = 'https://dataanalyzer-hkhn.onrender.com' //*LIVE DEPLOY*/
+
     useEffect(() => {
         const clearGraphs = async () => {
             try {
-                const response = await fetch('https://dataanalyzer-hkhn.onrender.com/cleanup', { method: 'GET' });
+                const response = await fetch(`${URL}/cleanup`, { method: 'GET' });
                 if (!response.ok) {
                     console.error('Failed to clear graph directory:', await response.text());
                 }
@@ -36,7 +39,7 @@ function App() {
             file_name: dataFileName
         }
 
-        const response = await fetch("https://dataanalyzer-hkhn.onrender.com/analyze", {
+        const response = await fetch(`${URL}/analyze`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -68,7 +71,7 @@ function App() {
         formData.append("file", selectedFile);
 
         try {
-            const response = await fetch("https://dataanalyzer-hkhn.onrender.com/upload", {
+            const response = await fetch(`${URL}/upload`, {
                 method: "POST",
                 body: formData,
             });
@@ -147,12 +150,12 @@ function App() {
                                 {message.graph_path && (
                                     <div>
                                         <img
-                                            src={`https://dataanalyzer-hkhn.onrender.com/${message.graph_path}`}
+                                            src={URL+message.graph_path}
                                             alt="graph"
                                             className="graph-image"
                                         />
                                         <a
-                                            href={`https://dataanalyzer-hkhn.onrender.com/${message.graph_path}`}
+                                            href={URL+message.graph_path}
                                             download
                                             onClick={e => {
                                                 e.preventDefault()
