@@ -8,8 +8,9 @@ function App() {
     const [selectedFile, setSelectedFile] = useState(null); 
     const [dataFileName, setDataFileName] = useState('')
 
-    //const URL = 'http://localhost:8000' //*LOCAL DEVELOPEMENT*/
+    //**SWITCH THIS URL WHEN WANTING TO RUN LOCALLY */
     const URL = 'https://dataanalyzer-hkhn.onrender.com' //*LIVE DEPLOY*/
+    //const URL = 'http://localhost:8000' //*LOCAL DEVELOPEMENT*/
 
     useEffect(() => {
         const clearGraphs = async () => {
