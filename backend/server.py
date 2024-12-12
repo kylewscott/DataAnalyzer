@@ -14,7 +14,7 @@ app = FastAPI(
 #Will be needed when deployed
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with frontend origin in production
+    allow_origins=["https://data-analyzer-one.vercel.app/"],  # Replace with frontend origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
