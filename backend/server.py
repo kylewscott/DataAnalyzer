@@ -14,14 +14,19 @@ app = FastAPI(
 #Will be needed when deployed
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Replace with frontend origin in production
+    allow_origins=["http://localhost:3000", "https://dataanalyzer-hkhn.onrender.com"],  # Replace with frontend origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-graph_directory = os.path.abspath("../public/graphs")
-upload_directory = os.path.abspath("../public/data")
+base_directory = os.path.abspath("../public")
+graph_directory = os.path.join(base_directory, "graphs")
+upload_directory = os.path.join(base_directory, "data")
+
+os.makedirs(graph_directory, exist_ok=True)
+os.makedirs(upload_directory, exist_ok=True)
+
 app.mount("/graphs", StaticFiles(directory=graph_directory), name="graphs")
 
 class PromptRequest(BaseModel):
