@@ -3,7 +3,7 @@ This application is an AI agent that utilizes LangChain and Chat Ollama to analy
 
 In the app you can upload your own CSV file from your computer and ask questions about the data or ask for specifc graphs to be generated regarding the data.
 
-#### Live App: In progress
+#### Live App: https://data-analyzer-one.vercel.app
 
 ## Setup Locally
 * Clone repository ```git clone https://github.com/kylewscott/DataAnalyzer.git```
@@ -18,7 +18,8 @@ In the app you can upload your own CSV file from your computer and ask questions
 * Navaigate to ```http://localhost:8000/docs``` for the API 
   
 ### Frontend
-* Inside repository navigate to the frontend folder and run: ```npm install``` 
+* Inside repository navigate to the frontend folder and run: ```npm install```
+* Inside src/App.js switch the URL variable at the top to the local development URL
 * In the frontend folder run ```npm start``` 
 * The frontend app can be found at ```http://localhost:3000```
 
