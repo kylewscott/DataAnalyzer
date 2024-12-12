@@ -14,7 +14,7 @@ app = FastAPI(
 #Will be needed when deployed
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://dataanalyzer-hkhn.onrender.com"],  # Replace with frontend origin in production
+    allow_origins=["https://dataanalyzer-hkhn.onrender.com"],  # Replace with frontend origin in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
